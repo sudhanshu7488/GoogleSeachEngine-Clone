@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:google_ex/resultSCreen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class GoogleSCreen extends StatefulWidget {
   const GoogleSCreen({super.key});
-
   @override
   State<GoogleSCreen> createState() => _GoogleSCreenState();
 }
 
 class _GoogleSCreenState extends State<GoogleSCreen> {
-  final TextEditingController _controller = TextEditingController();  
+  final TextEditingController _controller = TextEditingController();
   void _search() {
     final query = _controller.text.trim();
     if (query.isNotEmpty) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => ResultScreen(query: query),
-        ),
+        MaterialPageRoute(builder: (context) => ResultScreen(query: query)),
       );
     }
   }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screensize = MediaQuery.of(context).size;
@@ -31,17 +38,20 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
         title: Row(
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () => _launchURL(
+                "https://about.google/?fg=1&utm_source=google-IN&utm_medium=referral&utm_campaign=hp-header",
+              ),
               child: Text(
-                "About",
+                "about".tr(),
                 style: TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
-
             TextButton(
-              onPressed: () {},
+              onPressed: () => _launchURL(
+                "https://store.google.com/in/?utm_source=hp_header&utm_medium=google_ooo&utm_campaign=GS100042&hl=en-IN",
+              ),
               child: Text(
-                "Store",
+                "store".tr(),
                 style: TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
@@ -51,49 +61,22 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
           Row(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () => _launchURL("https://www.gmail.com"),
                 child: Text(
-                  "Gmail",
+                  "gmail".tr(),
                   style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
               ),
               SizedBox(width: 10),
               TextButton(
-                onPressed: () {},
+                onPressed: () => _launchURL(
+                  "https://www.google.com/imghp?hl=en&authuser=0&ogbl",
+                ),
                 child: Text(
-                  "Images",
+                  "images".tr(),
                   style: TextStyle(fontSize: 16, color: Colors.black),
                 ),
               ),
-              SizedBox(width: 10),
-              IconButton(onPressed: () {}, icon: Icon(Icons.wine_bar)),
-              IconButton(
-                onPressed: () {},
-                icon: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // 3x3 grid
-                          mainAxisSpacing: 2,
-                          crossAxisSpacing: 2,
-                        ),
-                    itemCount: 9,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey, // dot color
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              SizedBox(width: 10),
-              IconButton(onPressed: () {}, icon: CircleAvatar()),
             ],
           ),
         ],
@@ -181,14 +164,6 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
                             onPressed: () => _controller.clear(),
                             icon: const Icon(Icons.close),
                           ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.mic),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.image_search),
-                        ),
                       ],
                     );
                   },
@@ -200,11 +175,11 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: _search, child: Text("Google Search")),
+              ElevatedButton(onPressed: _search, child: Text("search".tr())),
               SizedBox(width: 20),
               ElevatedButton(
-                onPressed: () {},
-                child: Text("I'm Feeling Lucky"),
+                onPressed: () => _launchURL("https://doodles.google/"),
+                child: Text("lucky".tr()),
               ),
             ],
           ),
@@ -212,48 +187,51 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Google offered in:"),
+              Text("offered".tr()),
+              TextButton(
+                child: Text("English", style: TextStyle(color: Colors.indigo)),
+                onPressed: () => context.setLocale(const Locale('en')),
+              ),
               TextButton(
                 child: Text("हिन्दी", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('hi')),
               ),
               TextButton(
                 child: Text("বাংলা", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('bn')),
               ),
               TextButton(
                 child: Text("తెలుగు", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('te')),
               ),
               TextButton(
                 child: Text("मराठी", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('mr')),
               ),
               TextButton(
                 child: Text("தமிழ்", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('ta')),
               ),
               TextButton(
                 child: Text("ગુજરાતી", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('gu')),
               ),
               TextButton(
                 child: Text("ಕನ್ನಡ", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('kn')),
               ),
               TextButton(
                 child: Text("മലയാളം", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('ml')),
               ),
               TextButton(
                 child: Text("ਪੰਜਾਬੀ", style: TextStyle(color: Colors.indigo)),
-                onPressed: () {},
+                onPressed: () => context.setLocale(const Locale('pa')),
               ),
             ],
           ),
         ],
       ),
-
       bottomNavigationBar: Container(
         height: 90,
         width: screenwidth,
@@ -265,7 +243,7 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "India",
+                "india".tr(),
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
             ),
@@ -283,9 +261,11 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
               child: Row(
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () => _launchURL(
+                      "https://business.google.com/in/google-ads/?subid=ww-ww-et-g-awa-a-g_hpafoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpafooter&fg=1",
+                    ),
                     child: Text(
-                      "Advertising",
+                      "advertising".tr(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -294,9 +274,11 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
                   ),
                   SizedBox(width: 30),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => _launchURL(
+                      "https://business.google.com/in/business-profile/?subid=ww-ww-et-g-awa-a-g_hpbfoot1_1!o2&utm_source=google.com&utm_medium=referral&utm_campaign=google_hpbfooter&fg=1",
+                    ),
                     child: Text(
-                      "Business",
+                      "business".tr(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -305,9 +287,11 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
                   ),
                   SizedBox(width: 30),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => _launchURL(
+                      "https://www.google.com/search/howsearchworks/?fg=1",
+                    ),
                     child: Text(
-                      "How Search Works",
+                      "how_search_works".tr(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -316,9 +300,11 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
                   ),
                   Spacer(),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => _launchURL(
+                      "https://policies.google.com/privacy?hl=en-IN&fg=1",
+                    ),
                     child: Text(
-                      "Privacy",
+                      "privacy".tr(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -327,9 +313,11 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
                   ),
                   SizedBox(width: 30),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => _launchURL(
+                      "https://policies.google.com/terms?hl=en-IN&fg=1",
+                    ),
                     child: Text(
-                      "Terms",
+                      "terms".tr(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -337,16 +325,6 @@ class _GoogleSCreenState extends State<GoogleSCreen> {
                     ),
                   ),
                   SizedBox(width: 30),
-                  InkWell(
-                    onTap: () {},
-                    child: Text(
-                      "Settings",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
